@@ -1,0 +1,22 @@
+CREATE TABLE store (itemid INTEGER, name TEXT, quantity INTEGER, aisle INTEGER, sold INTEGER, price INTEGER);
+INSERT INTO store VALUES (1, 'screws', 31, 4, 321, .8);
+INSERT INTO store VALUES (2, 'paint', 15, 3, 98, 23.45);
+INSERT INTO store VALUES (3, 'stirrer', 30, 3, 540, 1.21);
+INSERT INTO store VALUES (4, 'brush', 43, 3, 109, 2.45);
+INSERT INTO store VALUES (5, 'rug', 12, 2, 24, 34.00);
+INSERT INTO store VALUES (6, 'tile', 465, 1, 1003, 3.99);
+INSERT INTO store VALUES (7, 'grout', 63, 1, 72, 43.99);
+INSERT INTO store VALUES (8, 'gloves', 239, 7, 65, 5.82);
+INSERT INTO store VALUES (9, 'soil', 83, 6, 465, 12.99);
+INSERT INTO store VALUES (10, 'shovel', 45, 7, 249, 12.87);
+INSERT INTO store VALUES (11, 'lawnmower', 2, 7, 4, 534.00);
+INSERT INTO store VALUES (12, 'hose', 56, 6, 213, 9.99);
+INSERT INTO store VALUES (13, 'lightbulb', 320, 4, 643, 2.99);
+INSERT INTO store VALUES (14, 'faucet', 11, 3, 83, 52.45);
+INSERT INTO store VALUES (15, 'pipe', 45, 3, 543, 13.50);
+
+SELECT * FROM store;
+
+SELECT itemid, name, MAX(sold), sold*price AS total_price FROM store; 
+
+SELECT * FROM store WHERE aisle > 5 ORDER BY aisle
