@@ -1,0 +1,148 @@
+
+
+/*visualization of table limit 5 entries*/
+SELECT * FROM astronauts LIMIT 5;
+
+/*amount of female vs male astronauts*/
+SELECT COUNT(Name), Gender
+FROM astronauts 
+GROUP BY Gender;
+
+/*gender of astronauts through the years*/
+SELECT Year, Gender, COUNT(Gender) AS amount_astronauts
+FROM astronauts 
+GROUP BY Year, Gender 
+ORDER BY Year;
+
+/*astronauts where year data is missing*/
+SELECT *
+FROM astronauts
+WHERE Year IS NULL;
+
+/*count and type of undergrad majors*/
+SELECT COUNT(Undergraduate_major) AS Number_undergrad, Undergraduate_major
+FROM astronauts
+GROUP BY Undergraduate_major
+ORDER BY COUNT(Undergraduate_major) DESC; 
+
+/*count and type of graduate majors*/
+SELECT COUNT(Graduate_major) AS Number_graduate, Graduate_major
+FROM astronauts
+GROUP BY Graduate_major
+ORDER BY COUNT(Graduate_major) DESC;
+
+/*count of military branches of astronauts*/
+SELECT COUNT(Military_Branch), Military_Branch 
+FROM astronauts 
+GROUP BY Military_Branch
+ORDER BY COUNT(Military_Branch) DESC;
+
+/*count military ranks of astronauts*/
+SELECT COUNT(Military_Rank), Military_Rank
+FROM astronauts
+GROUP BY Military_Rank
+ORDER BY COUNT(Military_Rank) DESC;
+
+/* min/max spaceflight/walks */
+ SELECT name, MAX(Space_Walks_hr)
+ FROM astronauts;
+ 
+SELECT name, MIN(Space_Walks_hr)
+FROM astronauts;
+
+SELECT name, MAX(Space_Flights)
+FROM astronauts;
+
+SELECT name, MIN(Space_Flights)
+FROM astronauts; 
+
+/*avg space walk by gender*/
+SELECT COUNT(name), AVG(Space_Walks_hr), Gender
+FROM astronauts
+GROUP BY Gender;
+
+/*astronauts that had more than one space mission*/
+SELECT name, Space_walks_hr, Space_flights, Missions
+FROM astronauts
+WHERE Missions >= 1;
+
+/*all the astronauts tha died in space missions*/
+SELECT name, year, Death_Date, Death_Mission
+FROM astronauts
+WHERE Death_Date IS NOT NULL AND Death_Mission IS NOT NULL; 
+
+
+/*CASE military status*/
+SELECT COUNT(name),
+ CASE
+    WHEN Military_Branch IS NULL THEN 'Civilian'
+    ELSE 'Served'
+    END AS Military_Status
+FROM astronauts
+GROUP BY Military_Status; 
+
+/*finding the # of women and men that are civilians vs military*/
+
+SELECT COUNT(Gender), Gender, 
+    CASE
+    WHEN Military_Branch IS NULL THEN 'Civilian'
+    ELSE 'Served'
+    END AS Military_Status
+FROM astronauts
+GROUP BY Military_Status, Gender; 
+
+
+/*all astronauts on death mission*/
+
+SELECT * 
+FROM astronauts
+WHERE Death_Mission IS NOT NULL;
+
+/*birthdates of astronauts*/
+SELECT Birth_Date
+FROM astronauts
+ORDER BY Birth_Date;
+
+/*Months astronauts were born*/
+
+SELECT COUNT(*),
+  CASE
+        WHEN Birth_Date LIKE '1/%' THEN 'JAN'
+        WHEN Birth_Date LIKE '2%' THEN 'FEB'
+        WHEN Birth_Date LIKE '3%' THEN 'MAR'
+        WHEN Birth_Date LIKE '4%' THEN 'APR'
+        WHEN Birth_Date LIKE '5%' THEN 'MAY'
+        WHEN Birth_Date LIKE '6%' THEN 'JUNE'
+        WHEN Birth_Date LIKE '7%' THEN 'JULY'
+        WHEN Birth_Date LIKE '8%' THEN 'AUG'
+        WHEN Birth_Date LIKE '9%' THEN 'SEPT'
+        WHEN Birth_Date LIKE '10%' THEN 'OCT'
+        WHEN Birth_Date LIKE '11/%' THEN 'NOV'
+        WHEN Birth_Date LIKE '12/%' THEN 'DEC'
+        ELSE 'N/A'
+    END AS Months_born  
+FROM astronauts
+GROUP BY Months_born
+ORDER BY COUNT(*) DESC;
+
+/* seasons astronauts were born */ 
+
+SELECT COUNT(*),
+    CASE 
+        WHEN Birth_Date LIKE '9/%' THEN 'FALL'
+        WHEN Birth_Date LIKE '10/%' THEN 'FALL'
+        WHEN Birth_Date LIKE '11/%' THEN 'FALL'
+        WHEN Birth_Date LIKE '3/%' THEN 'SPRING' 
+        WHEN Birth_Date LIKE '4/%' THEN 'SPRING'
+        WHEN Birth_Date LIKE '5/%' THEN 'SPRING'
+        WHEN Birth_Date LIKE '6/%' THEN 'SUMMER' 
+        WHEN Birth_Date LIKE '7/%' THEN 'SUMMER'
+        WHEN Birth_Date LIKE '8/%' THEN 'SUMMER'
+        WHEN Birth_Date LIKE '12/%' THEN 'WINTER' 
+        WHEN Birth_Date LIKE '1/%' THEN 'WINTER'
+        WHEN Birth_Date LIKE '2/%' THEN 'WINTER'
+        ELSE 'N/A'
+    END AS Season_born
+FROM astronauts 
+GROUP BY Season_born
+ORDER BY COUNT(*) DESC; 
