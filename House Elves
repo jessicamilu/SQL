@@ -1,0 +1,63 @@
+/* Create table about the house elves and what they do here */
+
+CREATE TABLE house_elves (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fullname TEXT, 
+    age INTEGER);
+    
+INSERT INTO house_elves (fullname, age) VALUES ("Lemondrop Lollipop", "182");
+INSERT INTO house_elves (fullname, age) VALUES ("Periwinkle Pumpkinpie", "79");
+INSERT INTO house_elves (fullname, age) VALUES ("Wagonwheel Steve", "54");
+INSERT INTO house_elves (fullname, age) VALUES ("Crumb Trail", "684");
+INSERT INTO house_elves (fullname, age) VALUES ("Bugfire Nose", "122");
+INSERT INTO house_elves (fullname, age) VALUES ("Stormthorn The Destroyer", "176");
+
+CREATE TABLE type (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    faction TEXT);
+    
+INSERT INTO type (faction) VALUES ("food");
+INSERT INTO type (faction) VALUES ("plant and fungi");
+INSERT INTO type (faction) VALUES ("lost items");
+INSERT INTO type (faction) VALUES ("tidying");
+INSERT INTO type (faction) VALUES ("mischief");
+INSERT INTO type (faction) VALUES ("protection");
+
+CREATE TABLE relationships (
+    id_elve1 INTEGER,
+    id_elve2 INTEGER,
+    type TEXT);
+    
+INSERT INTO relationships (id_elve1, id_elve2, type) VALUES ("5", "6", "married");
+INSERT INTO relationships (id_elve1, id_elve2, type) VALUES ("3", "4", "besties");
+INSERT INTO relationships (id_elve1, id_elve2, type) VALUES ("1", "5", "enemies");
+INSERT INTO relationships (id_elve1, id_elve2, type) VALUES ("1", "2", "married");
+INSERT INTO relationships (id_elve1, id_elve2, type) VALUES ("2", "6", "besties");
+
+/*join name and faction of eleves*/
+SELECT fullname, faction
+FROM house_elves
+JOIN type
+ON house_elves.id = type.id;
+
+/*join age and faction*/
+SELECT fullname, faction, age
+FROM house_elves
+JOIN type
+ON house_elves.id = type.id;
+
+/*join name and relationships of elves*/
+SELECT a.fullname AS Elve1, b.fullname AS Elve2, type AS status
+FROM relationships
+JOIN house_elves a
+ON a.id = relationships.id_elve1
+JOIN house_elves b
+ON b.id = relationships.id_elve2;
+
+/*joining faction and relationship*/
+SELECT a.faction AS Elve1, b.faction AS Elve2, type AS status
+FROM relationships
+JOIN type a
+ON a.id = relationships.id_elve1
+JOIN type b
+ON b.id = relationships.id_elve2;
