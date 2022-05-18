@@ -1,0 +1,113 @@
+/*I'm querying a database with multiple tables in it to quantify statistics about customer and order data.*/
+SELECT * 
+FROM BIT_DB.customers
+LIMIT 5;
+
+SELECT * 
+FROM BIT_DB.JanSales
+LIMIT 5;
+
+/*#orders placed in Jan*/
+SELECT COUNT (orderID) 
+FROM BIT_DB.JanSales;
+
+/*#orders placed in jan that were iphones*/
+SELECT COUNT (orderID) 
+FROM BIT_DB.JanSales
+WHERE product = 'iPhone';
+
+/*account number of all sales in FEB*/
+SELECT acctnum
+FROM BIT_DB.customers
+INNER JOIN BIT_DB.FEBSales 
+ON customers.order_id=FEBSales.orderid;
+
+/*min price of product in jan*/
+SELECT DISTINCT product, price
+FROM BIT_DB.JanSales
+WHERE price IN (SELECT MIN(price) FROM BIT_DB.JanSales);
+
+SELECT DISTINCT product, MIN(price) 
+FROM BIT_DB.JanSales
+GROUP BY product, price
+ORDER BY price
+LIMIT 1;
+
+SELECT DISTINCT product, price
+FROM BIT_DB.JanSales
+ORDER BY price
+LIMIT 1;
+
+/*total revenue for each product sold in JAN*/
+SELECT SUM(quantity)*price AS revenue, product
+FROM BIT_DB.JanSales
+GROUP BY product;
+
+/*type of products sold in FEB at 548 Lincoln ST, Seattle, WA 98101, quantity, and revenue of what was sold*/
+SELECT Product, SUM(Quantity), SUM(Quantity)*price AS Revenue, location
+FROM BIT_DB.FebSales
+WHERE location LIKE '548 Lincoln%'
+GROUP BY Product;
+
+select 
+sum(Quantity), 
+product, 
+sum(quantity)*price as revenue
+FROM BIT_DB.FebSales 
+WHERE location = '548 Lincoln St, Seattle, WA 98101'
+GROUP BY product;
+
+/*#customers that ordered more than 2 products AT A TIME in FEB and avg amount spent*/
+
+SELECT COUNT(customers.acctnum), AVG(quantity)*price
+FROM BIT_DB.customers
+INNER JOIN BIT_DB.FebSales
+ON FEBSales.orderID=customers.order_id
+WHERE FebSales.Quantity > 2;
+
+select 
+count(cust.acctnum), 
+avg(quantity)*price
+FROM BIT_DB.FebSales Feb
+LEFT JOIN BIT_DB.customers cust
+ON FEB.orderid=cust.order_id
+WHERE Feb.Quantity>2;
+
+/*all products sold in Los Angeles in FEB and how many of each*/
+SELECT product, SUM(quantity)
+FROM BIT_DB.FebSales
+WHERE location LIKE '%Los Angeles%' 
+GROUP BY Product;
+
+/*Which locations in NY recieved at least 3 orders in Jan, and how many orders did they each receive*/
+SELECT distinct location, COUNT(orderID)
+FROM BIT_DB.JanSales
+WHERE location LIKE '%NY%'
+GROUP BY location
+HAVING COUNT(orderID) >= 3;
+
+/*how many of each type of headphone were sold in Feb*/
+SELECT DISTINCT Product, SUM(Quantity)
+FROM BIT_DB.FebSales
+WHERE product LIKE '%headphone%'
+GROUP BY Product;
+
+
+/*avg amount spent per account in FEB*/
+SELECT SUM(quantity*price)/COUNT(cus.acctnum) AS AVG_Spent
+FROM BIT_DB.FebSales feb
+LEFT JOIN BIT_DB.customers cus
+ON feb.orderid=cus.order_id;
+
+/*avg quantity of products purchased per account in FEB*/
+SELECT SUM(quantity)/COUNT(cust.acctnum) AS AVG_products
+FROM BIT_DB.FebSales feb
+LEFT JOIN BIT_DB.customers cust
+ON feb.orderid=cust.order_id;
+
+/*which product brough the most revenue in JAN and how much did it bring*/
+SELECT distinct product, SUM(quantity)*price AS revenue
+FROM BIT_DB.JanSales
+GROUP BY product
+ORDER BY revenue DESC
+LIMIT 1;
