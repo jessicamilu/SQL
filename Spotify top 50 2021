@@ -1,0 +1,116 @@
+/* For this project, I downloaded Spotify data from Kaggle.*/
+/*Then I created a table to insert Spotify data into.*/
+/* Finally, I performed analytics on the data using SQL.*/ 
+
+/*Creating the table:*/
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness text NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL 
+)
+
+/*Then I inserted the Spotify Data .csv into the table.*/
+
+/*Next, I explored the data using the following SQL.*/
+
+SELECT id, artist_name, track_name, popularity, danceability, energy
+FROM BIT_DB.spotify_data_2021
+WHERE popularity > 90
+ORDER BY popularity  DESC;
+
+SELECT id, artist_name, track_name, popularity, danceability, energy
+FROM BIT_DB.spotify_data_2021
+ORDER BY danceability DESC, popularity;
+
+SELECT artist_name, track_name, danceability, energy, popularity, tempo
+FROM BIT_DB.spotify_data_2021
+WHERE artist_name IN
+(SELECT artist_name FROM BIT_DB.spotify_data_2021 GROUP BY artist_name HAVING COUNT(*) > 1)
+ORDER BY artist_name, popularity DESC;
+
+SELECT artist_name, track_name, danceability, energy, popularity, tempo
+FROM BIT_DB.spotify_data_2021
+WHERE artist_name IN
+(SELECT artist_name FROM BIT_DB.spotify_data_2021 GROUP BY artist_name HAVING COUNT(artist_name) = 1)
+ORDER BY popularity DESC, artist_name, track_name; 
+
+SELECT track_name, popularity, tempo
+FROM BIT_DB.spotify_data_2021
+ORDER BY popularity DESC
+LIMIT 10;
+
+SELECT track_name, popularity, tempo
+FROM BIT_DB.spotify_data_2021
+ORDER BY popularity 
+LIMIT 10;
+
+SELECT track_name, popularity, tempo
+FROM BIT_DB.spotify_data_2021
+ORDER BY tempo
+LIMIT 10;
+
+SELECT track_name, popularity, duration_ms 
+FROM BIT_DB.spotify_data_2021
+ORDER BY duration_ms
+LIMIT 10; 
+
+SELECT MIN(duration_ms), track_name
+FROM BIT_DB.spotify_data_2021;
+
+SELECT MAX(duration_ms), track_name
+FROM BIT_DB.spotify_data_2021;
+
+SELECT MIN(speechiness), track_name
+FROM BIT_DB.spotify_data_2021;
+
+SELECT MAX(speechiness), track_name
+FROM BIT_DB.spotify_data_2021;
+
+SELECT artist_name, track_name, popularity, valence 
+FROM BIT_DB.spotify_data_2021
+ORDER BY popularity DESC, valence DESC; 
+
+SELECT artist_name, track_name, popularity, MIN(valence) 
+FROM BIT_DB.spotify_data_2021;
+
+SELECT artist_name, track_name, popularity, MAX(valence) 
+FROM BIT_DB.spotify_data_2021; 
+
+SELECT track_name, loudness
+FROM BIT_DB.spotify_data_2021
+ORDER BY loudness DESC;
+
+SELECT AVG(danceability), artist_name
+FROM BIT_DB.spotify_data_2021
+GROUP BY artist_name;
+
+SELECT AVG(danceability)
+FROM BIT_DB.spotify_data_2021
+WHERE danceability IN (
+SELECT danceability
+FROM BIT_DB.spotify_data_2021
+ORDER BY popularity DESC
+LIMIT 10);
+
+SELECT
+artist_name
+,avg(popularity)
+,avg(danceability)
+,avg(energy)
+FROM BIT_DB.spotify_data_2021
+GROUP BY artist_name;
