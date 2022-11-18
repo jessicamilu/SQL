@@ -28,77 +28,90 @@ time_signature integer NOT NULL
 
 /*Next, I explored the data using the following SQL.*/
 
+/*Selecting id, artist, track, popularity, danceabiity, and energy where the popularity is over 90 from highest popularity to lowest*/
 SELECT id, artist_name, track_name, popularity, danceability, energy
 FROM BIT_DB.spotify_data_2021
 WHERE popularity > 90
 ORDER BY popularity  DESC;
 
+/*id, artist, song, popularity, danceability, and energy ordered by most danceable and least popular*/
 SELECT id, artist_name, track_name, popularity, danceability, energy
 FROM BIT_DB.spotify_data_2021
 ORDER BY danceability DESC, popularity;
 
+/*artist, songs, danceability, energy, popularity, and tempo where artist have more than one song on list*/
 SELECT artist_name, track_name, danceability, energy, popularity, tempo
 FROM BIT_DB.spotify_data_2021
 WHERE artist_name IN
 (SELECT artist_name FROM BIT_DB.spotify_data_2021 GROUP BY artist_name HAVING COUNT(*) > 1)
 ORDER BY artist_name, popularity DESC;
 
+/*artist, song names, danceability, energy, popularity and tempo where artists only appear on list once*/
 SELECT artist_name, track_name, danceability, energy, popularity, tempo
 FROM BIT_DB.spotify_data_2021
 WHERE artist_name IN
 (SELECT artist_name FROM BIT_DB.spotify_data_2021 GROUP BY artist_name HAVING COUNT(artist_name) = 1)
 ORDER BY popularity DESC, artist_name, track_name; 
 
+/*popularty and tempo of songs by most popular*/
 SELECT track_name, popularity, tempo
 FROM BIT_DB.spotify_data_2021
 ORDER BY popularity DESC
 LIMIT 10;
 
+/*popularity and tempo of songs by least popular */
 SELECT track_name, popularity, tempo
 FROM BIT_DB.spotify_data_2021
 ORDER BY popularity 
 LIMIT 10;
 
+/*popularity and tempo of songs by tempo*/
 SELECT track_name, popularity, tempo
 FROM BIT_DB.spotify_data_2021
 ORDER BY tempo
 LIMIT 10;
 
+/*name, popularity, and duration by shortest to longest songs*/
 SELECT track_name, popularity, duration_ms 
 FROM BIT_DB.spotify_data_2021
 ORDER BY duration_ms
 LIMIT 10; 
 
+/*shortest song*/
 SELECT MIN(duration_ms), track_name
 FROM BIT_DB.spotify_data_2021;
 
+/*longest song*/
 SELECT MAX(duration_ms), track_name
 FROM BIT_DB.spotify_data_2021;
 
+/*less wordiest song*/
 SELECT MIN(speechiness), track_name
 FROM BIT_DB.spotify_data_2021;
 
+/*wordiest song*/
 SELECT MAX(speechiness), track_name
 FROM BIT_DB.spotify_data_2021;
 
+/*artist, popularity, and "happiness" of songs by most popular to least */
 SELECT artist_name, track_name, popularity, valence 
 FROM BIT_DB.spotify_data_2021
 ORDER BY popularity DESC, valence DESC; 
 
+/*lowest "happiness" song along with artist and popularity */
 SELECT artist_name, track_name, popularity, MIN(valence) 
 FROM BIT_DB.spotify_data_2021;
 
+/*highest "happiness" song along with artist and popularity*/
 SELECT artist_name, track_name, popularity, MAX(valence) 
 FROM BIT_DB.spotify_data_2021; 
 
+/*loudness from highest to lowest by song*/
 SELECT track_name, loudness
 FROM BIT_DB.spotify_data_2021
 ORDER BY loudness DESC;
 
-SELECT AVG(danceability), artist_name
-FROM BIT_DB.spotify_data_2021
-GROUP BY artist_name;
-
+/*Avg danceability of the lost 10 most poplar songs*/
 SELECT AVG(danceability)
 FROM BIT_DB.spotify_data_2021
 WHERE danceability IN (
@@ -107,6 +120,7 @@ FROM BIT_DB.spotify_data_2021
 ORDER BY popularity DESC
 LIMIT 10);
 
+/*avg popularity, danceability, and energy by artist*/
 SELECT
 artist_name
 ,avg(popularity)
